@@ -80,16 +80,17 @@ st.sidebar.button(
     args=(peak - peak_margin, peak + peak_margin),
 )
 
-flg1 = (fat_range[0] <= img) & (img <= fat_range[1])  # 脂肪かどうか
-flg2 = (msl_range[0] <= img) & (img <= msl_range[1])  # 筋肉かどうか
+img2 = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+flg1 = (fat_range[0] <= img2) & (img2 <= fat_range[1])  # 脂肪かどうか
+flg2 = (msl_range[0] <= img2) & (img2 <= msl_range[1])  # 筋肉かどうか
 col1, col2 = st.columns(2)
 with col1:
-    st.markdown("#### 脂肪範囲（白）")
-    st.image(np.where(flg1, 255, img), width=IMG_WIDTH)  # 脂肪を白に
+    st.markdown("#### 脂肪範囲（黃）")
+    st.image(np.where(flg1, [255, 255, 80], img2), width=IMG_WIDTH)  # 脂肪を黃に
     st.write(f"面積: {flg1.sum()}")
 with col2:
-    st.markdown("#### 筋肉範囲（白）")
-    st.image(np.where(flg2, 255, img), width=IMG_WIDTH)  # 筋肉を白に
+    st.markdown("#### 筋肉範囲（赤）")
+    st.image(np.where(flg2, [255, 80, 80], img2), width=IMG_WIDTH)  # 筋肉を赤に
     st.write(f"面積: {flg2.sum()}")
 
 st.write(f"脂肪 / 筋肉: {flg1.sum() / flg2.sum():.4}")
